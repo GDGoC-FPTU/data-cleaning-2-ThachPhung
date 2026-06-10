@@ -29,12 +29,12 @@ def clean_data(input_file, output_file):
         # 1. Deduplication: Ensure each id only appears once
         if item['id'] in seen_ids:
             continue
-        
+
         # 2. Outlier Check: Remove any item with price > $5,000
         price = item['price']
         if price > 5000:
             continue
-            
+
         # 3. Sanity Check: Remove any item with price < 0
         if price < 0:
             continue
@@ -42,13 +42,14 @@ def clean_data(input_file, output_file):
         # 4. PII Masking: Remove name and mask email
         item.pop('name', None)
         item['email'] = mask_email(item['email'])
-            
+
         sanitized_data.append(item)
         seen_ids.add(item['id'])
 
     # Save the sanitized data
-    with open(output_file, "w", encoding='utf-8') as f:
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(sanitized_data, f, indent=4, ensure_ascii=False)
+
     print(f"Successfully sanitized data. Output saved to {output_file}")
     print(f"Original records: {len(data)}")
     print(f"Sanitized records: {len(sanitized_data)}")
